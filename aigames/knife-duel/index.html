@@ -1,27 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Hero Game</title>
-</head>
-<body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+var GameLayer = cc.Layer.extend({
+    ctor:function () {
+        this._super();
+        this.sprite = new cc.Sprite(this.heroFrames[0]);
+        this.sprite.setPosition(400, 300);
+        // Double the hero size
+        this.sprite.setScale(this.sprite.getScale() * 2);
+        this.addChild(this.sprite);
+        // other code...
 
-    <script type="text/javascript" src="cocos/cocos2d-js-v3.13.js" charset="UTF-8"></script>
-    <script type="text/javascript" src="game.js" charset="UTF-8"></script>
-
-    <script type="text/javascript">
-        window.onload = function () {
-            cc.game.onStart = function () {
-                cc.view.setDesignResolutionSize(800, 600, cc.ResolutionPolicy.SHOW_ALL);
-                cc.view.resizeWithBrowserSize(true);
-
-                // Load hero.png before starting
-                cc.LoaderScene.preload(["assets/hero.png"], function () {
-                    cc.director.runScene(new GameScene());
-                }, this);
-            };
-            cc.game.run("gameCanvas");
-        };
-    </script>
-</body>
-</html>
+        // Load arrow sprite sheet and spawn arrow pickups
+        var arrowTexture = cc.textureCache.addImage("res/arrows.png");
+        var arrowFrameWidth = arrowTexture.width / 4;
+        var arrowFrameHeight = arrowTexture.height;
+        this.arrowFrames = [];
+        for (var i = 0; i < 4; i++) {
+            var frame = new cc.SpriteFrame(
+                arrowTexture,
+                cc.rect(i * arrowFrameWidth, 0, arrowFrameWidth, arrowFrameHeight)
+            );
+            this.arrowFrames.push(frame);
+        }
+        // other code...
+    }
+    // other methods...
+});
